@@ -4,6 +4,8 @@ $ vagrant init
 config.vm.network "private_network", ip: “***.***.**.**”
 //存在していないVMをVBから削除する
 $ vagrant global-status --prune
+//yumのアップデート
+sudo yum -y update
 //yumリストを"httpd"で検索
 $ yum list | grep httpd
 //インストールコマンド
@@ -14,3 +16,5 @@ $ yum list installed | grep httpd
 control+D
 //vagrantを止める
 $vagrant halt
+//ipの確認
+$ip a
