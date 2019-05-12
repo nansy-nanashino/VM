@@ -18,3 +18,7 @@ control+D
 $vagrant halt
 //ipの確認
 $ip a
+//scpで送る場合
+$scp -P ポート番号 -F ssh.config -r ファイルパス vagrant@localhost:/home/vagrant/
+//scpで引き出す場合
+$ scp -P ポート番号 -F ssh.config vagrant@localhost:ファイルパス .
