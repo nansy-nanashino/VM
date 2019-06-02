@@ -1,0 +1,51 @@
+//squidをインストール
+yum -y install squid
+//confを設定
+sudo vim /etc/squid/squid.conf
+//設定変更
+http_access deny all->#http_access deny all
+http_port 3128->#http_port 3128
+//最終行に追加
+# ホストネームは任意のものを。
+visible_hostname myproxygogo.info
+
+# ポート8080は一般的すぎるので使いません。
+http_port 60088
+
+# xxx.xxx.xxx.xxxIPを記述する。
+# わからなければ
+# http://www.ugtop.com/spill.shtml
+# ここの「現在接続している場所（IPv4）」のIPを書きます。
+acl myacl src xxx.xxx.xxx.xxx/255.255.255.255
+http_access allow myacl
+http_access deny all
+
+# プロキシサーバーを使用している端末のローカルIPアドレスを隠蔽化
+forwarded_for off
+
+# プロキシ経由でアクセスしていることをアクセス先に知られないようにする
+header_access X-Forwarded-For deny all
+header_access Via deny all
+header_access Cache-Control deny all
+
+//キャッシュクリア
+squid -z
+//起動
+service squid start
+
+//ファイアーウォール設定
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:FWINPUT - [0:0]
+-A INPUT -j FWINPUT
+-A FORWARD -j FWINPUT
+-A FWINPUT -i lo -j ACCEPT
+-A FWINPUT -p icmp --icmp-type any -j ACCEPT
+-A FWINPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+# xxx.xxx.xxx.xxxは自身の接続元IPに置き換える
+-A FWINPUT -p tcp -m tcp --dport 22 -s xxx.xxx.xxx.xxx -j ACCEPT
+-A FWINPUT -p tcp -m tcp --dport 60088 -s xxx.xxx.xxx.xxx -j ACCEPT
+-A FWINPUT -j REJECT --reject-with icmp-host-prohibited
+COMMIT

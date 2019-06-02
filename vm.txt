@@ -1,27 +1,27 @@
 // 初期化（設定ファイル作成）
-$ vagrant init
+vagrant init
 //IPの設定
 config.vm.network "private_network", ip: “***.***.**.**”
 //存在していないVMをVBから削除する
-$ vagrant global-status --prune
+vagrant global-status --prune
 //yumのアップデート
 sudo yum -y update
 //yumリストを"httpd"で検索
-$ yum list | grep httpd
+yum list | grep httpd
 //インストールコマンド
-$ sudo yum install
+sudo yum install
 //インストール済みパッケージの確認
-$ yum list installed | grep httpd
+yum list installed | grep httpd
 //VMを抜ける
 control+D
 //vagrantを止める
 $vagrant halt
 //ipの確認
-$ip a
+ip a
 //scpで送る場合
 scp -F ssh.config <ローカルファイルパス> vagrant@localhost:<リモートファイルパス>
 //scpで引き出す場合
-$ scp  -F ssh.config vagrant@localhost:<リモートファイルパス> <ローカルファイルパス>
+scp  -F ssh.config vagrant@localhost:<リモートファイルパス> <ローカルファイルパス>
 //ディレクトリを解凍する
 unzip ディレクトリ名
 //ディレクトリを圧縮
@@ -30,3 +30,21 @@ zip <zip後のディレクトリ名>　-r <zip前のディレクトリ名>
 wget https://rpms.remirepo.net/enterprise/remi-release-7.rpm
 //ダウンロードしたものをrpmに適応
 sudo rpm -ivh remi-release-7.rpm
+
+
+//接続確認
+ip addr
+//デバイスの確認
+nmcli d
+//デバイスの詳細確認
+nmcli d show デバイス名
+//ipアドレス変更
+nmcli c modify 変更したいデバイス名 ipv4.addresses ***.**.**.***/**
+//デフォルトゲートウェイ変更
+nmcli c modify 変更したいデバイス名 ipv4.gateway ***.**.**.**
+//IPを固定割り当てに設定 (DHCP は "auto"に変更)
+nmcli c modify eth0 ipv4.method manual
+//インターフェースを再起動して設定を反映
+nmcli c down 変更したデバイス; nmcli c up 変更したデバイス 
+//ファイル確認
+cat /etc/sysconfig/network-scripts/ifcfg-確認したいデバイス
