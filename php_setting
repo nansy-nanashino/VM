@@ -1,0 +1,13 @@
+//rpmからiniファイルの確認
+rpm -ql php-common | grep "php.ini"
+//php.iniのタイムゾーン検索
+cat /etc/php.ini | grep "date.timezone"
+//タイムゾーンの設定変更
+;date.timezone = ->date.timezone = "Asia/Tokyo"
+//タイムゾーンのセット
+sudo timedatectl set-timezone Asia/Tokyo
+//エラーログを変更
+;error_log = php_errors.log->error_log = /var/log/php_errors.log 
+
+ログ出力(例)
+error_log(print_r($array, true);
